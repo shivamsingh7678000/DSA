@@ -10,14 +10,17 @@ class Solution {
     for (int[] interval : intervals) {
       final int start = interval[0];
       final int end = interval[1];
+      
       if (mx >= start && secondMax >= start)
         continue;
       if (mx >= start) {
+      
         secondMax = mx;
-        mx = end;
+        mx = end; 
         ans += 1;
       } else {
-        mx = end;            
+       
+        mx = end;           
         secondMax = end - 1; 
         ans += 2;
       }
