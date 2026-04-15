@@ -24,7 +24,8 @@ class Solution {
 
         if (dp[i][j] != -1) return dp[i][j];
 
-        long res = solve(i, j + 1, robot, factory); 
+        long res = solve(i, j + 1, robot, factory);
+
         long cost = 0;
         int pos = factory[j][0];
         int limit = factory[j][1];
