@@ -1,38 +1,33 @@
 class Solution {
     public boolean isMatch(String s, String p) {
-        return match(s, p, 0, 0);
-    }
-    
-    private boolean match(String s, String p, int sIndex, int pIndex) {
-        if (sIndex == s.length() && pIndex == p.length()) {
-            return true;
-        }
 
-        if (pIndex == p.length()) {
-            return false;
-        }
-        
-        char current_char = p.charAt(pIndex);
-        boolean has_star = (pIndex + 1 < p.length() && p.charAt(pIndex + 1) == '*');
-        
-        if (has_star) {
-            if (match(s, p, sIndex, pIndex + 2)) {
-                return true;
-            }
-            
-            int i = sIndex;
-            while (i < s.length() && (current_char == '.' || s.charAt(i) == current_char)) {
-                if (match(s, p, i + 1, pIndex + 2)) {
-                    return true;
-                }
-                i++;
-            }
-            return false;
-        } else {
-            if (sIndex < s.length() && (current_char == '.' || s.charAt(sIndex) == current_char)) {
-                return match(s, p, sIndex + 1, pIndex + 1);
-            }
-            return false;
+    if (s == null || p == null) {
+        return false;
+    }
+    boolean[][] dp = new boolean[s.length()+1][p.length()+1];
+    dp[0][0] = true;
+    for (int i = 0; i < p.length(); i++) {
+        if (p.charAt(i) == '*' && dp[0][i-1]) {
+            dp[0][i+1] = true;
         }
     }
+    for (int i = 0 ; i < s.length(); i++) {
+        for (int j = 0; j < p.length(); j++) {
+            if (p.charAt(j) == '.') {
+                dp[i+1][j+1] = dp[i][j];
+            }
+            if (p.charAt(j) == s.charAt(i)) {
+                dp[i+1][j+1] = dp[i][j];
+            }
+            if (p.charAt(j) == '*') {
+                if (p.charAt(j-1) != s.charAt(i) && p.charAt(j-1) != '.') {
+                    dp[i+1][j+1] = dp[i+1][j-1];
+                } else {
+                    dp[i+1][j+1] = (dp[i+1][j] || dp[i][j+1] || dp[i+1][j-1]);
+                }
+            }
+        }
+    }
+    return dp[s.length()][p.length()];
+}
 }
