@@ -1,24 +1,24 @@
 class Solution {
-  public List<List<Integer>> combinationSum(int[] candidates, int target) {
-    List<List<Integer>> ans = new ArrayList<>();
-    Arrays.sort(candidates);
-    dfs(candidates, 0, target, new ArrayList<>(), ans);
-    return ans;
-  }
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
 
-  private void dfs(int[] candidates, int s, int target, List<Integer> path,
-                   List<List<Integer>> ans) {
-    if (target < 0)
-      return;
-    if (target == 0) {
-      ans.add(new ArrayList<>(path));
-      return;
+        makeCombination(candidates, target, 0, new ArrayList<>(), 0, res);
+        return res;        
     }
 
-    for (int i = s; i < candidates.length; ++i) {
-      path.add(candidates[i]);
-      dfs(candidates, i, target - candidates[i], path, ans);
-      path.remove(path.size() - 1);
-    }
-  }
+    private void makeCombination(int[] candidates, int target, int idx, List<Integer> comb, int total, List<List<Integer>> res) {
+        if (total == target) {
+            res.add(new ArrayList<>(comb));
+            return;
+        }
+
+        if (total > target || idx >= candidates.length) {
+            return;
+        }
+
+        comb.add(candidates[idx]);
+        makeCombination(candidates, target, idx, comb, total + candidates[idx], res);
+        comb.remove(comb.size() - 1);
+        makeCombination(candidates, target, idx + 1, comb, total, res);
+    }    
 }
